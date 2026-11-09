@@ -2,7 +2,7 @@
 
 Mobile-first hub for Liverpool FC (senior men): live news, stats by competition, squad, injuries with return windows, and club history.
 
-**Live site:** https://apoe218.github.io/liverbird-news/
+**Live site:** https://apoe218.github.io/Liverbird-News/
 
 ## How it works
 - Static site, no build step. `index.html`, `app.js`, `styles.css`.
