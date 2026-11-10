@@ -3,7 +3,7 @@
   {
    "id": "pl",
    "name": "Premier League",
-   "status": "Table from BBC Sport, updated 9 Nov 2026 15:26. The results list below is partial (not every match entered).",
+   "status": "Table and record auto-updated from BBC Sport (9th November 2026 at 15:26). The results list below is partial and entered by hand.",
    "summary": {
     "pos": "4th",
     "P": 10,
@@ -264,7 +264,7 @@
   {
    "id": "ucl",
    "name": "Champions League",
-   "status": "League phase after matchday 4 (BBC Sport, 9 Nov). The top 8 go straight to the last 16, so Liverpool sit right on the line. Top 20 shown. Next: Club Brugge away, 25 Nov.",
+   "status": "League phase, auto-updated from BBC Sport (5th November 2026 at 01:21). Top 8 go straight to the last 16; places 9-24 play off.",
    "summary": {
     "pos": "8th",
     "P": 4,
@@ -509,6 +509,50 @@
      "D": 1,
      "L": 2,
      "GD": 2,
+     "Pts": 4,
+     "me": false
+    },
+    {
+     "pos": 21,
+     "team": "Shakhtar Donetsk",
+     "P": 4,
+     "W": 1,
+     "D": 1,
+     "L": 2,
+     "GD": 0,
+     "Pts": 4,
+     "me": false
+    },
+    {
+     "pos": 22,
+     "team": "Viking",
+     "P": 4,
+     "W": 1,
+     "D": 1,
+     "L": 2,
+     "GD": -1,
+     "Pts": 4,
+     "me": false
+    },
+    {
+     "pos": 23,
+     "team": "Atlético Madrid",
+     "P": 4,
+     "W": 1,
+     "D": 1,
+     "L": 2,
+     "GD": -1,
+     "Pts": 4,
+     "me": false
+    },
+    {
+     "pos": 24,
+     "team": "PSV",
+     "P": 4,
+     "W": 1,
+     "D": 1,
+     "L": 2,
+     "GD": -1,
      "Pts": 4,
      "me": false
     }

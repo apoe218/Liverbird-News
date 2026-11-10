@@ -78,7 +78,12 @@ const load=async()=>{for(const k of ['meta','competitions','squad','injuries','h
 const res=m=>m.hs===m.as?'D':((m.h==='Liverpool')===(m.hs>m.as)?'W':'L');
 const matchRow=m=>{const r=res(m);return `<div class="row"><div class="l"><b>${esc(m.h)} ${m.hs}–${m.as} ${esc(m.a)}</b><span class="muted">${fmt(m.date)}${m.c?' · '+esc(m.c):''}</span></div><span class="pill ${r}">${r}</span></div>`};
 const allMatches=()=>(D.competitions?.competitions||[]).flatMap(c=>c.matches.map(m=>({...m,c:c.name}))).sort((a,b)=>b.date.localeCompare(a.date));
-const days=d=>Math.ceil((dt(d)-new Date())/864e5);
+const midnight=x=>{const t=new Date(x);t.setHours(0,0,0,0);return t};
+const days=d=>Math.round((midnight(dt(d))-midnight(new Date()))/864e5); // whole calendar days, so it never rolls over mid-day
+const upcoming=()=>(D.meta?.upcoming||[]).filter(u=>days(u.date)>=0).sort((a,b)=>a.date.localeCompare(b.date));
+const nextMatch=()=>{const u=upcoming().find(x=>/\((H|A)\)$/.test(x.t)&&x.k&&/^\d/.test(x.k)&&x.k.length<7)||upcoming()[0];
+  if(!u)return D.meta?.next&&days(D.meta.next.date)>=0?D.meta.next:null;
+  const home=/\(H\)$/.test(u.t);return{opponent:u.t.replace(/ \([HA]\)$/,''),competition:u.comp,date:u.date,venue:(home?'Anfield':'Away')+(u.k.length<7?' · '+u.k+' UK':'')}};
 function newsCard(i,lead){
   const l={transfers:'Transfers & market',team:'Team news',injury:'Injury news'}[i.cat]||'News';
   const img=i.img?`<img src="${safeUrl(i.img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:'';
@@ -92,10 +97,10 @@ function summary(c){
 const skeleton='<div class="skel"></div><div class="skel"></div>';
 const R={
 home(){
-  const n=D.meta?.next, ms=allMatches().slice(0,5), news=allNews().filter(i=>i.cat!=='injury'), inj=allNews().filter(i=>i.cat==='injury'||INJ.test(i.title)).slice(0,3);
+  const n=nextMatch(), ms=allMatches().slice(0,5), news=allNews().filter(i=>i.cat!=='injury'), inj=allNews().filter(i=>i.cat==='injury'||INJ.test(i.title)).slice(0,3);
   const d=n?days(n.date):0;
-  return `${n?`<div class="card hero"><div class="k">Next up · ${esc(n.competition)}</div><div class="big">vs ${esc(n.opponent)}</div><div>${fmt(n.date,{weekday:'long',day:'numeric',month:'long'})}</div><div class="muted">${esc(n.venue)}</div><span class="cd">${d>0?`⏱ ${d} days to go`:d===0?'⏱ Today':'Played'}</span></div>`:''}
-  ${(D.meta?.upcoming||[]).length?`<div class="card"><b>Fixtures</b>${D.meta.upcoming.map(u=>`<div class="row"><div class="l"><b>${esc(u.t)}</b><span class="muted">${esc(u.comp)}</span></div><span class="muted" style="text-align:right">${/^\d{4}-\d\d-\d\d$/.test(u.date)&&u.k.length<7?fmt(u.date)+' · '+esc(u.k):fmt(u.date)+'<br>'+esc(u.k)}</span></div>`).join('')}</div>`:''}<div class="card row" style="align-items:center"><div><b>Recent form</b><div class="muted">Last ${ms.length} entered</div></div><div class="form">${ms.map(m=>`<span class="pill ${res(m)}">${res(m)}</span>`).join('')}</div></div>
+  return `${n?`<div class="card hero"><div class="k">Next up · ${esc(n.competition)}</div><div class="big">vs ${esc(n.opponent)}</div><div>${fmt(n.date,{weekday:'long',day:'numeric',month:'long'})}</div><div class="muted">${esc(n.venue)}</div><span class="cd">${d>1?`⏱ ${d} days to go`:d===1?'⏱ Tomorrow':d===0?'⏱ Today':'Played'}</span></div>`:''}
+  ${upcoming().length?`<div class="card"><b>Fixtures</b>${upcoming().map(u=>`<div class="row"><div class="l"><b>${esc(u.t)}</b><span class="muted">${esc(u.comp)}</span></div><span class="muted" style="text-align:right">${/^\d{4}-\d\d-\d\d$/.test(u.date)&&u.k.length<7?fmt(u.date)+' · '+esc(u.k):fmt(u.date)+'<br>'+esc(u.k)}</span></div>`).join('')}</div>`:''}<div class="card row" style="align-items:center"><div><b>Recent form</b><div class="muted">Last ${ms.length} entered</div></div><div class="form">${ms.map(m=>`<span class="pill ${res(m)}">${res(m)}</span>`).join('')}</div></div>
   <h2>Latest <a href="#/news">All news →</a></h2>${news[0]?newsCard(news[0],true):skeleton}${news.slice(1,4).map(i=>newsCard(i)).join('')}
   <h2>Premier League <a href="#/stats">Stats →</a></h2>${summary(D.competitions?.competitions?.[0])}
   <h2>Injury watch <a href="#/injuries">All →</a></h2><div class="card">${(D.injuries?.items||[]).slice(0,4).map(i=>`<div class="row"><div class="l"><b>${esc(i.n)}</b><span class="muted">${esc(i.window)}</span></div></div>`).join('')}</div>`;

@@ -1,5 +1,5 @@
 {
- "updated": "2026-11-09",
+ "updated": "2026-11-10",
  "manager": "Andoni Iraola (Head Coach)",
  "stadium": "Anfield · 61,276",
  "next": {
@@ -7,7 +7,7 @@
   "competition": "Premier League",
   "date": "2026-11-22",
   "venue": "Anfield · 16:30 UK",
-  "note": "Confirmed on BBC Sport fixtures"
+  "note": "Auto-updated from BBC Sport fixtures"
  },
  "note": "Verified 9 Nov 2026 against BBC Sport tables and fixtures and the club injury list (updated 6 Nov). News is live. Roster and honours are hand-curated in /data.",
  "upcoming": [
@@ -33,7 +33,8 @@
    "date": "2026-12-14",
    "t": "Bournemouth (H)",
    "comp": "League Cup QF",
-   "k": "Week of 14 Dec"
+   "k": "Week of 14 Dec",
+   "manual": true
   }
  ]
 }

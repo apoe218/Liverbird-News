@@ -4,7 +4,9 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: '17 */3 * * *'   # refresh the bundled news snapshot every 3 hours
+    # Daily rebuild at 11:03 UTC = 5:03am US Central Standard Time (6:03am during daylight saving).
+    # GitHub cron is UTC-only and can start a few minutes late.
+    - cron: '3 11 * * *'
   workflow_dispatch:
 
 permissions:
@@ -26,6 +28,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
+      - name: Refresh tables and fixtures from BBC Sport (leaves data untouched if parsing fails)
+        run: node scripts/update-data.mjs || true
       - name: Refresh news snapshot (offline fallback; live feeds load in the browser)
         run: node scripts/update-news.mjs || true
       - name: Stage site
